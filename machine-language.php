@@ -1,29 +1,34 @@
 <?php
 /*
 Plugin Name: Machine Language
-Plugin URI: https://github.com/szepeviktor/wordpress-plugin-construction
+Plugin URI: https://github.com/szepeviktor/machine-language
 Description: Toggles human and machine language (aka IDs) on admin pages.
-Version: 0.3
+Version: 0.3.1
 License: The MIT License (MIT)
 Author: Viktor Szépe
-Author URI: http://www.online1.hu/webdesign/
 Text Domain: machinelanguage
+GitHub Plugin URI: https://github.com/szepeviktor/machine-language
+Options: MACHINE_LANGUAGE_HOOK
 */
 
 if ( ! function_exists( 'add_filter' ) ) {
-    error_log( 'File does not exist: errorlog_direct_access '
-               . esc_url( $_SERVER['REQUEST_URI'] ) );
-
+    error_log( 'Break-in attempt detected: machine_language_direct_access '
+        . addslashes( @$_SERVER['REQUEST_URI'] )
+    );
     ob_get_level() && ob_end_clean();
-    header( 'Status: 403 Forbidden' );
-    header( 'HTTP/1.0 403 Forbidden' );
-    exit();
+    if ( ! headers_sent() ) {
+        header( 'Status: 403 Forbidden' );
+        header( 'HTTP/1.1 403 Forbidden', true, 403 );
+        header( 'Connection: Close' );
+    }
+    exit;
 }
 
 if ( ! class_exists( 'Machine_Language' ) ):
 /**
- * Toggles human and machine language (aka IDs) on admin pages.
- * A one-class plugin
+ * Toggles human and machine language (aka ID-s) on admin pages
+ *
+ * A one-class plugin.
  *
  * @package Machine_Language
  */
@@ -38,7 +43,7 @@ class Machine_Language {
      */
     private $nonce = 'machine_language';
     /**
-     * @var string Hook name for the Screen Option message
+     * @var string Hook name HTML tag in Screen Option
      */
     private $hook = '';
     /**
@@ -46,7 +51,7 @@ class Machine_Language {
      */
     private $enabled;
     /**
-     * @var bool Javascript template, a mu-plugin needs one file
+     * @var bool Javascript template, a mu-plugin must be in one file
      */
     private $js_template = '<script type="text/javascript" id="machine-lang">
         jQuery(function ($) {
@@ -154,7 +159,7 @@ class Machine_Language {
                     ajaxurl,
                     postdata,
                     function (result) {
-                        if (result=="1") {
+                        if (result == "1") {
                             disableDesc.prop("disabled", false);
                             spinner.css("display", "none");
                         }
@@ -175,17 +180,20 @@ class Machine_Language {
             $action = MACHINE_LANGUAGE_HOOK;
             $this->hook = '<span>&nbsp;@</span><code>' . $action . '</code>';
         }
-
         add_action( $action, array( $this, 'hooks' ) );
-        // update user option on checkbox state change
+
+        // Update user option on checkbox state change
         add_action( 'wp_ajax_o1_toggle_descriptions', array( $this, 'ajax_receiver' ) );
     }
 
     public function hooks() {
-        // add the checkbox to "Screen Options"
+
+        // Add the checkbox to "Screen Options"
         add_filter( 'screen_settings', array( $this, 'checkbox' ), 99, 2 );
-        // hide descriptions by CSS
+
+        // Hide descriptions by CSS
         add_action( 'admin_print_styles', array( $this, 'style' ) );
+
         // Javascript for the checkbox
         add_action( 'admin_head', array( $this, 'script' ) );
     }
@@ -206,12 +214,12 @@ class Machine_Language {
 
     public function style() {
 
-        // early enough to set it here (@admin_print_styles)
+        // Early enough to set enabled here (@admin_print_styles)
         $this->enabled = get_user_option( $this->option, get_current_user_id() );
 
         if ( $this->enabled )
-            printf( '<style type="text/css" id="hide-descriptions">
-                #wpbody p.description,#wpbody span.description {display:none;}</style>' );
+            print '<style type="text/css" id="hide-descriptions">
+                #wpbody p.description,#wpbody span.description {display:none;}</style>';
     }
 
     public function script() {
@@ -219,7 +227,7 @@ class Machine_Language {
         $nonce = wp_create_nonce( $this->nonce );
 
         printf( $this->js_template,
-            $this->enabled ? 'true' :  'false',
+            $this->enabled ? 'true' : 'false',
             $nonce
         );
     }
@@ -230,6 +238,7 @@ class Machine_Language {
 
         $machine = ( 'true' === $_POST['state'] );
         update_user_option( get_current_user_id(), $this->option, $machine, true );
+
         wp_die( 1 );
     }
 }

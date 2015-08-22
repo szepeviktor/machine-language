@@ -3,54 +3,58 @@ Contributors: szepe.viktor
 Donate link: https://szepe.net/wp-donate/
 Tags: debug, debugger, debugging, developer, development, admin, screen, setting, settings, option, options
 Requires at least: 3.8
-Tested up to: 4.0
-Stable tag: 0.3
+Tested up to: 4.3
+Stable tag: 0.3.1
 License: GPLv2
 
 Admin page debugger tool
 
 == Description ==
 
-Toggles human and machine language (aka IDs) on admin pages.
+Toggles human and machine language (aka ID-s) on admin pages.
 
 = Only for development! =
 
-This plugin shows you the IDs of almost all form fields including selects, checkboxes and radio buttons.
+This plugin shows you the ID-s of almost all form fields including selects,
+checkboxes and radio buttons like in `wp-admin/options.php`.
 
-It works only on WordPress Settings API-like formatted - not necessarily API generated - admin pages.
-E.g. the `<input>`-s cannot be wrapped in `<span>`-s.
+It works only on WordPress Settings API-like formatted &mdash; not necessarily API generated &mdash; admin pages.
+E.g. `<input>` elements cannot be wrapped in `<span>`.
 
 = Activation =
 
 You can find the plugin's checkbox in standard Screen Options (upper right corner).
-This checkbox could be overwritten - thus hidden - by poorly written plugins.
-To restrict Machine Language to a certain admin page, put a line like this in wp-config.php:
+This checkbox could be overwritten &mdash; thus hidden &mdash; by poorly written plugins.
+To restrict Machine Language to a certain admin page, copy this to your `wp-config.php`:
 
-`define( 'MACHINE_LANGUAGE_HOOK', 'load-options-reading.php' );`
+`
+define( 'MACHINE_LANGUAGE_HOOK', 'load-options-reading.php' );
+`
 
-This line causes to run only on Settings / Reading.
+For example this line causes to run only on Settings / Reading.
 
 = Features =
 
-* Basicly all input IDs are displayed in place of labels, really not input IDs but `for` attributes of labels
-* Selects get a title showing all option values (comma separated)
-* Options get values appended in the form of "original option text|value"
+* Basically all input ID-s are displayed in place of labels, actually `for` attributes of labels
+* `select`-s get a title showing all option values comma separated (hover over `select`-s with your mouse)
+* `option`-s get values appended in the form of "original option text|value"
 * Radio button labels will show: "name|value"
-* Descriptions (`p`-s and `span`-s with "description" class) will he hidden, it will clean up all admin pages,
-descriptions are hidden by CSS, so there's no [FUOC](http://en.wikipedia.org/wiki/Flash_of_unstyled_content)
+* Descriptions (`p`-s and `span`-s with "description" class) will be hidden,
+this way Machine Language will clean up all admin pages,
+descriptions are hidden by CSS, so there's no [FOUC](http://en.wikipedia.org/wiki/Flash_of_unstyled_content)
 
 = Other notes =
 
 * Radio buttons or checkboxes with empty value are displayed with the "Empty Set"
-Unicode character: "∅" (U+2205) (e.g. Settings / Permalinks / Default )
-* Selects with empty values are not
+Unicode character: "∅" (U+2205) ( e.g. Settings / Permalinks / Default )
+* `select`-s with empty values are not
 * The plugin's checkbox in Screen Options is effective immediately
-* The code is designed as a must use plugin, so there is no separated Javascript file
+* The code is designed as a must use plugin, so there is no separated Javascript or CSS file
 * State of Machine Language is saved as a user option so it is a per user setting
 
 = Links =
 
-[GitHub repo](https://github.com/szepeviktor/wordpress-plugin-construction/tree/master/machine-language/trunk)
+[GitHub repo](https://github.com/szepeviktor/machine-language)
 
 == Installation ==
 
@@ -75,6 +79,10 @@ Please don't!
 1. Setting / Reading with Machine Language turned on.
 
 == Changelog ==
+
+= 0.3.1 =
+* Code styling
+* WP 4.3 compatibility
 
 = 0.3 =
 * Initial release
