@@ -54,7 +54,7 @@ Unicode character: "∅" (U+2205) ( e.g. Settings / Permalinks / Default )
 
 = Links =
 
-[GitHub repo](https://github.com/szepeviktor/machine-language)
+Development goes on on [GitHub](https://github.com/szepeviktor/machine-language).
 
 == Installation ==
 
@@ -83,6 +83,7 @@ Please don't!
 = 0.3.1 =
 * Code styling
 * WP 4.3 compatibility
+* Semver
 
 = 0.3 =
 * Initial release
