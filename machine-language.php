@@ -3,7 +3,7 @@
 Plugin Name: Machine Language
 Plugin URI: https://github.com/szepeviktor/machine-language
 Description: Toggles human and machine language (aka IDs) on admin pages.
-Version: 0.3.1
+Version: 0.3.2
 License: The MIT License (MIT)
 Author: Viktor Szépe
 Text Domain: machinelanguage
@@ -113,9 +113,10 @@ class Machine_Language {
                     if (!elem.length) return;
                     if (machine) {
                         $(e).prop("data-machine-lang", elem[0].textContent);
-                        value = $(e).find("input[type=radio]").prop("value");
+                        name = $(e).find("input[type=checkbox]").prop("name");
+                        value = $(e).find("input[type=checkbox]").prop("value");
                         if ($.trim(value) == "") value = noContent;
-                        elem[0].textContent = value;
+                        elem[0].textContent = name + "|" + value;
                     } else {
                         elem[0].textContent = $(e).prop("data-machine-lang");
                     }
