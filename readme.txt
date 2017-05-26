@@ -38,7 +38,7 @@ For example this line causes to run only on Settings / Reading.
 * Basically all input ID-s are displayed in place of labels, actually `for` attributes of labels
 * `select`-s get a title showing all option values comma separated (hover over `select`-s with your mouse)
 * `option`-s get values appended in the form of "original option text|value"
-* Radio button labels will show: "name|value"
+* Radio button and checkbox labels will show: "name|value"
 * Descriptions (`p`-s and `span`-s with "description" class) will be hidden,
 this way Machine Language will clean up all admin pages,
 descriptions are hidden by CSS, so there's no [FOUC](http://en.wikipedia.org/wiki/Flash_of_unstyled_content)

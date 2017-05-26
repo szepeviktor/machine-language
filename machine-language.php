@@ -13,7 +13,7 @@ Options: MACHINE_LANGUAGE_HOOK
 
 if ( ! function_exists( 'add_filter' ) ) {
     error_log( 'Break-in attempt detected: machine_language_direct_access '
-        . addslashes( @$_SERVER['REQUEST_URI'] )
+        . addslashes( isset( $_SERVER['REQUEST_URI'] ) ? $_SERVER['REQUEST_URI'] : '' )
     );
     ob_get_level() && ob_end_clean();
     if ( ! headers_sent() ) {
@@ -43,7 +43,7 @@ class Machine_Language {
      */
     private $nonce = 'machine_language';
     /**
-     * @var string Hook name HTML tag in Screen Option
+     * @var string Hook name HTML addition in Screen Option
      */
     private $hook = '';
     /**
@@ -168,6 +168,7 @@ class Machine_Language {
                 );
             };
 
+            // On page load
             if (machineLang) translate(true);
             disableDesc.click(onClick);
         });
@@ -218,9 +219,10 @@ class Machine_Language {
         // Early enough to set enabled here (@admin_print_styles)
         $this->enabled = get_user_option( $this->option, get_current_user_id() );
 
-        if ( $this->enabled )
+        if ( $this->enabled ) {
             print '<style type="text/css" id="hide-descriptions">
                 #wpbody p.description,#wpbody span.description {display:none;}</style>';
+        }
     }
 
     public function script() {
